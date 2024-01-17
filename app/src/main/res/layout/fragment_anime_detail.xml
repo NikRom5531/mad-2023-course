@@ -1,0 +1,76 @@
+<!-- fragment_anime_detail.xml -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="?android:attr/actionBarSize"
+    android:paddingStart="@dimen/_20dp"
+    android:paddingEnd="@dimen/_20dp"
+    android:paddingBottom="@dimen/_20dp">
+
+    <!-- Изображение аниме -->
+    <ImageView
+        android:id="@+id/imageViewAnime"
+        android:layout_width="match_parent"
+        android:layout_height="240dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_anime" />
+
+    <!-- Название аниме -->
+    <TextView
+        android:id="@+id/textViewTitle"
+        android:text="textViewTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/imageViewAnime"
+        android:layout_marginTop="@dimen/_20dp"
+        android:textSize="@dimen/_20sp"
+        android:textStyle="bold" />
+
+    <!-- Год выхода аниме -->
+    <TextView
+        android:id="@+id/textViewYear"
+        android:text="textViewYear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewTitle"
+        android:layout_marginTop="@dimen/_20dp"
+        android:textSize="@dimen/_20sp" />
+
+    <!-- Жанры аниме -->
+    <TextView
+        android:id="@+id/textViewGenres"
+        android:text="textViewGenres"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewYear"
+        android:layout_marginTop="@dimen/_20dp"
+        android:textSize="@dimen/_20sp" />
+
+    <!-- Список серий аниме -->
+    <TextView
+        android:id="@+id/textViewEpisodes"
+        android:text="textViewEpisodes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewGenres"
+        android:layout_marginTop="@dimen/_20dp"
+        android:textSize="@dimen/_20sp" />
+
+    <!-- Кнопки для добавления в просмотренное и в желаемое -->
+    <Button
+        android:id="@+id/buttonAddToWatched"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewEpisodes"
+        android:layout_marginTop="@dimen/_20dp"
+        android:text="Добавить в просмотренное" />
+
+    <Button
+        android:id="@+id/buttonAddToWishlist"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/buttonAddToWatched"
+        android:layout_marginTop="@dimen/_20dp"
+        android:text="Добавить в желаемое" />
+
+</RelativeLayout>
