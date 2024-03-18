@@ -1,76 +1,114 @@
 <!-- fragment_anime_detail.xml -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/fragmentAnimeDetailContainer"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingTop="?android:attr/actionBarSize"
-    android:paddingStart="@dimen/_20dp"
-    android:paddingEnd="@dimen/_20dp"
-    android:paddingBottom="@dimen/_20dp">
-
-    <!-- Изображение аниме -->
-    <ImageView
-        android:id="@+id/imageViewAnime"
-        android:layout_width="match_parent"
-        android:layout_height="240dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/ic_anime" />
-
+    android:layout_height="wrap_content"
+    android:paddingTop="?android:attr/actionBarSize">
     <!-- Название аниме -->
-    <TextView
-        android:id="@+id/textViewTitle"
-        android:text="textViewTitle"
+
+    <ProgressBar
+        android:id="@+id/progressBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/imageViewAnime"
-        android:layout_marginTop="@dimen/_20dp"
-        android:textSize="@dimen/_20sp"
-        android:textStyle="bold" />
-
-    <!-- Год выхода аниме -->
-    <TextView
-        android:id="@+id/textViewYear"
-        android:text="textViewYear"
+        android:layout_gravity="center"
+        android:layout_marginVertical="@dimen/_20dp" />
+    <ScrollView
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/textViewTitle"
-        android:layout_marginTop="@dimen/_20dp"
-        android:textSize="@dimen/_20sp" />
+        android:layout_height="match_parent"
+        android:visibility="gone">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="@dimen/_20dp"
+            android:paddingEnd="@dimen/_20dp"
+            android:paddingBottom="@dimen/_20dp">
 
-    <!-- Жанры аниме -->
-    <TextView
-        android:id="@+id/textViewGenres"
-        android:text="textViewGenres"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/textViewYear"
-        android:layout_marginTop="@dimen/_20dp"
-        android:textSize="@dimen/_20sp" />
+            <TextView
+                android:id="@+id/textViewTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/load_data"
+                android:textSize="@dimen/_20sp"
+                android:textStyle="bold" />
 
-    <!-- Список серий аниме -->
-    <TextView
-        android:id="@+id/textViewEpisodes"
-        android:text="textViewEpisodes"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/textViewGenres"
-        android:layout_marginTop="@dimen/_20dp"
-        android:textSize="@dimen/_20sp" />
+            <!-- Изображение аниме -->
+            <ImageView
+                android:id="@+id/imageViewAnime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/textViewTitle"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/_20dp"
+                android:adjustViewBounds="true"
+                android:importantForAccessibility="no"
+                android:src="@drawable/ic_anime" />
 
-    <!-- Кнопки для добавления в просмотренное и в желаемое -->
-    <Button
-        android:id="@+id/buttonAddToWatched"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/textViewEpisodes"
-        android:layout_marginTop="@dimen/_20dp"
-        android:text="Добавить в просмотренное" />
+            <!-- Год выхода аниме -->
+            <TextView
+                android:id="@+id/textViewYear"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/_30dp"
+                android:layout_below="@+id/imageViewAnime"
+                android:layout_marginTop="@dimen/_10dp"
+                android:text="@string/load_data"
+                android:textSize="@dimen/_20sp"
+                android:textStyle="italic" />
 
-    <Button
-        android:id="@+id/buttonAddToWishlist"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/buttonAddToWatched"
-        android:layout_marginTop="@dimen/_20dp"
-        android:text="Добавить в желаемое" />
+            <!-- Кнопка для добавления в просмотренное -->
+            <ImageView
+                android:id="@+id/buttonWatchList"
+                android:layout_width="@dimen/_30dp"
+                android:layout_height="@dimen/_30dp"
+                android:layout_below="@+id/imageViewAnime"
+                android:layout_centerVertical="true"
+                android:layout_marginTop="@dimen/_10dp"
+                android:layout_marginEnd="@dimen/_10dp"
+                android:layout_toStartOf="@+id/buttonWishList"
+                android:importantForAccessibility="no"
+                android:src="@drawable/ic_view" />
 
+            <!-- Кнопка для добавления в желаемое -->
+            <ImageView
+                android:id="@+id/buttonWishList"
+                android:layout_width="@dimen/_30dp"
+                android:layout_height="@dimen/_30dp"
+                android:layout_below="@+id/imageViewAnime"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="@dimen/_10dp"
+                android:importantForAccessibility="no"
+                android:src="@drawable/ic_wish" />
+
+            <!-- Жанры аниме -->
+            <TextView
+                android:id="@+id/textViewGenres"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/buttonWatchList"
+                android:layout_marginTop="@dimen/_10dp"
+                android:text="@string/load_data"
+                android:textSize="@dimen/_20sp" />
+
+            <!-- Описание аниме -->
+            <TextView
+                android:id="@+id/textPlotSummary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/textViewGenres"
+                android:layout_marginTop="@dimen/_20dp"
+                android:text="@string/load_data"
+                android:textSize="@dimen/_20sp" />
+
+            <!-- Список серий аниме -->
+            <TextView
+                android:id="@+id/textViewEpisodes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textPlotSummary"
+                android:layout_marginTop="@dimen/_20dp"
+                android:text="@string/load_data"
+                android:textSize="@dimen/_20sp" />
+        </RelativeLayout>
+    </ScrollView>
 </RelativeLayout>

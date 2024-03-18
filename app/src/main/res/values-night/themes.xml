@@ -1,7 +1,8 @@
 <resources>
-    <!-- Base application theme. -->
-    <style name="Base.Theme.Mad2023course" parent="Theme.Material3.DayNight.NoActionBar">
+    <!-- Dark theme -->
+    <style name="Base.Theme.Mad2023course.Dark" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your dark theme here. -->
-         <item name="colorPrimary">@color/white</item>
+        <item name="colorPrimary">@color/white</item>
     </style>
+    <style name="Theme.Mad2023course.Dark" parent="Base.Theme.Mad2023course.Dark" />
 </resources>

@@ -1,6 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Энциклопедия Аниме</string>
     <string name="textAnimeName">textAnimeName</string>
     <string name="textType">textType</string>
+    <string name="textUnknown">Неизвестно</string>
+    <string name="m_January" tools:ignore="ExtraTranslation">январь</string>
+    <string name="m_February" tools:ignore="ExtraTranslation">февраль</string>
+    <string name="m_March" tools:ignore="ExtraTranslation">март</string>
+    <string name="m_April" tools:ignore="ExtraTranslation">апрель</string>
+    <string name="m_May" tools:ignore="ExtraTranslation">май</string>
+    <string name="m_June" tools:ignore="ExtraTranslation">июнь</string>
+    <string name="m_July" tools:ignore="ExtraTranslation">июль</string>
+    <string name="m_August" tools:ignore="ExtraTranslation">август</string>
+    <string name="m_September" tools:ignore="ExtraTranslation">сентябрь</string>
+    <string name="m_October" tools:ignore="ExtraTranslation">октябрь</string>
+    <string name="m_November" tools:ignore="ExtraTranslation">ноябрь</string>
+    <string name="m_December" tools:ignore="ExtraTranslation">декабрь</string>
+    <!-- Preference Titles -->
+    <string name="messages_header">Messages</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="load_data">Загрузка…</string>
 </resources>

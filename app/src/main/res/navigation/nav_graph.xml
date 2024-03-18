@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/animeListFragment"
-        android:name="com.romanov.encyclopedia_anime.ui.AnimeListFragment"
+        android:name="com.romanov.encyclopedia_anime.ui.fragment.AnimeListFragment"
         android:label="Anime List"
         tools:layout="@layout/fragment_anime_list">
         <action
@@ -17,10 +17,29 @@
 
     <fragment
         android:id="@+id/animeDetailFragment"
-        android:name="com.romanov.encyclopedia_anime.ui.AnimeDetailFragment"
+        android:name="com.romanov.encyclopedia_anime.ui.fragment.AnimeDetailFragment"
         android:label="Anime Detail"
-        tools:layout="@layout/fragment_anime_detail" />
+        tools:layout="@layout/fragment_anime_detail"/>
 
-    <!-- Добавьте другие фрагменты по мере необходимости -->
+    <fragment
+        android:id="@+id/watchListFragment"
+        android:name="com.romanov.encyclopedia_anime.ui.fragment.WatchListFragment"
+        android:label="Watched List"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:layout="@layout/fragment_watch_list"
+        app:defaultNavHost="true"/>
 
+    <fragment
+        android:id="@+id/wishListFragment"
+        android:name="com.romanov.encyclopedia_anime.ui.fragment.WishListFragment"
+        android:label="Wish List"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:layout="@layout/fragment_wish_list"
+        app:defaultNavHost="true"/>
+
+    <action android:id="@+id/action_global_animeListFragment" app:destination="@id/animeListFragment"/>
+    <action android:id="@+id/action_global_watchListFragment" app:destination="@id/watchListFragment"/>
+    <action android:id="@+id/action_global_wishListFragment" app:destination="@id/wishListFragment"/>
 </navigation>

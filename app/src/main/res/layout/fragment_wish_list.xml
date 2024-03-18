@@ -1,22 +1,23 @@
-<!-- fragment_anime_list.xml -->
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:paddingTop="?android:attr/actionBarSize"
-    tools:context=".ui.fragment.AnimeListFragment">
-    <!-- Поле для поиска -->
+    tools:context=".ui.fragment.WishListFragment">
+
     <SearchView
         android:id="@+id/searchView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:iconifiedByDefault="false"
-        android:queryHint="Поиск аниме" />
+        android:queryHint="Поиск желаемого аниме"
+        android:visibility="gone" />
 
     <ProgressBar
         android:id="@+id/progressBar"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginVertical="@dimen/_20dp"
@@ -34,7 +35,7 @@
 
     <!-- Список аниме -->
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewAnimeList"
+        android:id="@+id/recyclerViewWishList"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
