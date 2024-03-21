@@ -116,14 +116,10 @@ public class AnimeListViewModel extends ViewModel {
             }
         });
         mediatorLiveData.addSource(watchedLiveData, watchedList -> {
-            if (responseLiveData.getValue() != null && watchedList != null && wishLiveData.getValue() != null) {
-                mediatorLiveData.setValue(responseLiveData.getValue());
-            }
+            if (responseLiveData.getValue() != null && watchedList != null && wishLiveData.getValue() != null) mediatorLiveData.setValue(responseLiveData.getValue());
         });
         mediatorLiveData.addSource(wishLiveData, wishList -> {
-            if (responseLiveData.getValue() != null && watchedLiveData.getValue() != null && wishList != null) {
-                mediatorLiveData.setValue(responseLiveData.getValue());
-            }
+            if (responseLiveData.getValue() != null && watchedLiveData.getValue() != null && wishList != null) mediatorLiveData.setValue(responseLiveData.getValue());
         });
         mediatorLiveData.observeForever(animeListLiveData::setValue);
     }
