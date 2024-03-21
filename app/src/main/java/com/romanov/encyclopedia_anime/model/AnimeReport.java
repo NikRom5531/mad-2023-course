@@ -1,8 +1,6 @@
 package com.romanov.encyclopedia_anime.model;
 
 import androidx.annotation.NonNull;
-import androidx.room.Entity;
-import androidx.room.PrimaryKey;
 
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;

@@ -1,5 +1,6 @@
 package com.romanov.encyclopedia_anime.ui.fragment;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,22 +18,18 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.room.Room;
 
 import com.romanov.encyclopedia_anime.R;
-import com.romanov.encyclopedia_anime.data.local.AppDatabase;
 import com.romanov.encyclopedia_anime.databinding.FragmentAnimeListBinding;
 import com.romanov.encyclopedia_anime.model.AnimeReport.AnimeItem;
 import com.romanov.encyclopedia_anime.ui.adapter.AnimeListAdapter;
 import com.romanov.encyclopedia_anime.ui.viewmodel.AnimeListViewModel;
-import com.romanov.encyclopedia_anime.ui.viewmodel.DataBaseViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class AnimeListFragment extends Fragment {
     private FragmentAnimeListBinding binding;
-    private DataBaseViewModel dataBaseViewModel;
     private AnimeListAdapter adapter;
     private AnimeListViewModel animeListViewModel;
 
@@ -51,12 +49,10 @@ public class AnimeListFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         // Подписываемся на изменения LiveData
-        dataBaseViewModel = new ViewModelProvider(this).get(DataBaseViewModel.class);
-        dataBaseViewModel.setDatabase(Room.databaseBuilder(requireContext(), AppDatabase.class, "anime_database").fallbackToDestructiveMigration().build());
+        animeListViewModel.setDatabase(requireContext());
+        animeListViewModel.init();
+        animeListViewModel.getAnimeListLiveData().observe(getViewLifecycleOwner(), this::updateAnimeList);
         adapter = new AnimeListAdapter(new ArrayList<>());
-
-        dataBaseViewModel.getAllAnime().observe(getViewLifecycleOwner(), this::updateAnimeList);
-        animeListViewModel.getAnimeListLiveData().observe(getViewLifecycleOwner(), animeList -> dataBaseViewModel.checkList(animeList));
         adapter.setOnItemClickListener(position -> {
             Bundle bundle = new Bundle();
             Log.i("INFO", "anime_id: " + adapter.getAnimeList().get(position).getId());
@@ -86,6 +82,10 @@ public class AnimeListFragment extends Fragment {
             if (savedStateHandle != null) {
                 List<AnimeItem> animeList = savedStateHandle.get(animeListViewModel.KEY_SAVED_STATE);
                 updateAnimeList(animeList);
+                if (savedStateHandle.contains("errorMessage")) {
+                    String errorMessage = savedStateHandle.get("errorMessage");
+                    Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
@@ -117,8 +117,12 @@ public class AnimeListFragment extends Fragment {
         binding = null;
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private void updateAnimeList(List<AnimeItem> animeList) {
-        if (animeList != null) adapter.setAnimeList(animeList);
+        if (animeList != null) {
+            adapter.setAnimeList(animeList);
+            adapter.notifyDataSetChanged();
+        }
         progressBar(View.GONE);
     }
 

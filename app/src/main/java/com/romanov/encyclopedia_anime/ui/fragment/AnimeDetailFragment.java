@@ -11,10 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.room.Room;
 
 import com.romanov.encyclopedia_anime.R;
-import com.romanov.encyclopedia_anime.data.local.AppDatabase;
 import com.romanov.encyclopedia_anime.databinding.FragmentAnimeDetailBinding;
 
 import com.romanov.encyclopedia_anime.ui.viewmodel.AnimeDetailViewModel;
@@ -60,7 +58,7 @@ public class AnimeDetailFragment extends Fragment {
         animeId = args != null ? args.getLong(animeDetailViewModel.KEY_ANIME_ID) : 0;
 
         dataBaseViewModel = new ViewModelProvider(this).get(DataBaseViewModel.class);
-        dataBaseViewModel.setDatabase(Room.databaseBuilder(requireContext(), AppDatabase.class, "anime_database").fallbackToDestructiveMigration().build());
+        dataBaseViewModel.setDatabase(requireContext());
         dataBaseViewModel.getWatchedStatusLiveData().observe(getViewLifecycleOwner(), this::checkWatched);
         dataBaseViewModel.getWishStatusLiveData().observe(getViewLifecycleOwner(), this::checkWish);
 

@@ -1,11 +1,14 @@
 package com.romanov.encyclopedia_anime.ui.viewmodel;
 
+import android.content.Context;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
+import androidx.room.Room;
 
 import com.romanov.encyclopedia_anime.data.local.AnimeDao;
 import com.romanov.encyclopedia_anime.data.local.AppDatabase;
@@ -41,8 +44,8 @@ public class DataBaseViewModel extends ViewModel {
     public DataBaseViewModel() {
     }
 
-    public void setDatabase(AppDatabase database) {
-        setAnimeDao(database.animeDao());
+    public void setDatabase(Context context) {
+        setAnimeDao(Room.databaseBuilder(context, AppDatabase.class, "anime_database").fallbackToDestructiveMigration().build().animeDao());
     }
 
     private void setAnimeDao(AnimeDao animeDao) {
@@ -211,10 +214,5 @@ public class DataBaseViewModel extends ViewModel {
             ((AnimeItem) anime).setWatchedStatus(isWatched);
             ((AnimeItem) anime).setWishStatus(isWish);
         }
-    }
-
-    public void checkList(List<AnimeItem> animeItemList) {
-        for (AnimeItem animeItem : animeItemList) checkAnime(animeItem);
-        setAllAnime(animeItemList);
     }
 }

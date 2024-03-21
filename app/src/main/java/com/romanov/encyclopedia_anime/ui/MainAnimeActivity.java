@@ -14,7 +14,6 @@ import android.view.MenuItem;
 
 import com.romanov.encyclopedia_anime.R;
 import com.romanov.encyclopedia_anime.databinding.ActivityAnimeListBinding;
-import com.romanov.encyclopedia_anime.ui.fragment.WatchListFragment;
 import com.romanov.encyclopedia_anime.ui.viewmodel.AnimeListViewModel;
 
 public class MainAnimeActivity extends AppCompatActivity {

@@ -38,7 +38,7 @@ public class AnimeDetailViewModel extends ViewModel {
     public final String KEY_ANIME_GENRES = "anime_genres";
     public final String KEY_ANIME_SUMMARY = "anime_summary";
     public final String KEY_ANIME_EPISODES = "anime_episodes";
-    private MutableLiveData<Map<String, String>> animeDetailLiveData = new MutableLiveData<>();
+    private final MutableLiveData<Map<String, String>> animeDetailLiveData = new MutableLiveData<>();
     public LiveData<Map<String, String>> getAnimeLiveData() {
         return animeDetailLiveData;
     }
@@ -60,7 +60,6 @@ public class AnimeDetailViewModel extends ViewModel {
                     AnimeDetail animeDetail = response.body();
                     anime = animeDetail.getAnime();
                     animeDetailLiveData.postValue(mapList(animeDetail.getAnime()));
-                    Log.i("ANIME", animeDetail.getAnime().toString());
                 } else {
                     // Обработка ошибок
                     Log.w("WARNING", "response: " + response.body());

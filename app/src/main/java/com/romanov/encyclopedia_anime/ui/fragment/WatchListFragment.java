@@ -8,13 +8,11 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.room.Room;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.romanov.encyclopedia_anime.data.local.AppDatabase;
 import com.romanov.encyclopedia_anime.databinding.FragmentWatchListBinding;
 import com.romanov.encyclopedia_anime.model.Anime;
 import com.romanov.encyclopedia_anime.ui.adapter.AnimeLowAdapter;
@@ -44,7 +42,7 @@ public class WatchListFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         progressBar(View.VISIBLE);
         dataBaseViewModel = new ViewModelProvider(this).get(DataBaseViewModel.class);
-        dataBaseViewModel.setDatabase(Room.databaseBuilder(requireContext(), AppDatabase.class, "anime_database").fallbackToDestructiveMigration().build());
+        dataBaseViewModel.setDatabase(requireContext());
         dataBaseViewModel.getWatchedLiveData().observe(getViewLifecycleOwner(), this::updateAnimeList);
         dataBaseViewModel.setWatchedList();
 

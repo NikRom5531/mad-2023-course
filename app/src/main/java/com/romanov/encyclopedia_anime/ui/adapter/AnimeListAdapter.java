@@ -83,19 +83,14 @@ public class AnimeListAdapter extends RecyclerView.Adapter<AnimeListAdapter.Anim
             textType.setText(anime.getType());
             buttonWatchList.setImageResource(checkWatched(anime.isWatchedStatus()));
             buttonWishList.setImageResource(checkWish(anime.isWishStatus()));
-            // Добавьте здесь другие компоненты вашего элемента списка, если необходимо
         }
 
         private int checkWatched(boolean status){
-//            if (status) buttonWatchList.setColorFilter(Color.argb(255, 66,170,255));
-//            else buttonWatchList.clearColorFilter();
             if (status) return R.drawable.ic_view_on;
             else return R.drawable.ic_view;
         }
 
         private int checkWish(boolean status){
-//            if (status) buttonWishList.setColorFilter(Color.RED);
-//            else buttonWishList.clearColorFilter();
             if (status) return R.drawable.ic_wish_on;
             else return R.drawable.ic_wish;
         }

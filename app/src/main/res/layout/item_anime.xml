@@ -30,30 +30,6 @@
         app:layout_constraintTop_toBottomOf="@+id/textNameAnime"
         tools:ignore="MissingConstraints" />
 
-<!--    <TextView-->
-<!--        android:id="@+id/temp_wish"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="temp_wish"-->
-<!--        android:textSize="16sp"-->
-<!--        android:layout_marginEnd="@dimen/_10dp"-->
-<!--        android:textStyle="italic"-->
-<!--        app:layout_constraintEnd_toStartOf="@+id/textType"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/textNameAnime"-->
-<!--        tools:ignore="MissingConstraints" />-->
-
-<!--    <TextView-->
-<!--        android:id="@+id/temp_watch"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="temp_watch"-->
-<!--        android:textSize="16sp"-->
-<!--        android:layout_marginEnd="@dimen/_10dp"-->
-<!--        android:textStyle="italic"-->
-<!--        app:layout_constraintEnd_toStartOf="@+id/temp_wish"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/textNameAnime"-->
-<!--        tools:ignore="MissingConstraints" />-->
-
     <ImageView
         android:id="@+id/buttonWatchList"
         android:layout_width="@dimen/_30dp"
