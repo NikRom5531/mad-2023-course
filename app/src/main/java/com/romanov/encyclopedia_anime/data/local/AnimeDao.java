@@ -37,4 +37,6 @@ public interface AnimeDao {
     @Query("SELECT EXISTS (SELECT 1 FROM anime_table WHERE id = :animeId AND wishStatus = 0 AND watchedStatus = 0)")
     LiveData<Boolean> isAnimeEmpty(long animeId);
 
+
+
 }

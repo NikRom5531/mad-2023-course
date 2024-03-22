@@ -42,7 +42,7 @@ public class WatchListFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         progressBar(View.VISIBLE);
         dataBaseViewModel = new ViewModelProvider(this).get(DataBaseViewModel.class);
-        dataBaseViewModel.setDatabase(requireContext());
+        dataBaseViewModel.setContextFragment(requireContext());
         dataBaseViewModel.getWatchedLiveData().observe(getViewLifecycleOwner(), this::updateAnimeList);
         dataBaseViewModel.setWatchedList();
 

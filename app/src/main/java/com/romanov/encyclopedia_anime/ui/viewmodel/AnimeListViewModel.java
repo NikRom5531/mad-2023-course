@@ -30,7 +30,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class AnimeListViewModel extends ViewModel {
-    private AnimeDao animeDao;
+    private Context contextFragment;
     public final String KEY_SAVED_STATE = "savedStateHandle";
     private final MutableLiveData<List<AnimeItem>> animeListLiveData = new MutableLiveData<>();
 
@@ -45,21 +45,26 @@ public class AnimeListViewModel extends ViewModel {
     }
 
     private final MutableLiveData<List<AnimeItem>> responseLiveData = new MutableLiveData<>();
-
-    public void setDatabase(Context context) {
-        setAnimeDao(Room.databaseBuilder(context, AppDatabase.class, "anime_database").fallbackToDestructiveMigration().build().animeDao());
+    public void setContextFragment(Context context) {
+        contextFragment = context;
     }
 
-    private void setAnimeDao(AnimeDao animeDao) {
-        this.animeDao = animeDao;
+    private AppDatabase getDatabase() {
+        return Room.databaseBuilder(contextFragment, AppDatabase.class, "anime_database").fallbackToDestructiveMigration().build();
     }
 
     private LiveData<List<Anime>> getAnimeListByWishStatus() {
-        return animeDao.getAnimeListByWishStatus();
+        AppDatabase database = getDatabase();
+        LiveData<List<Anime>> listLiveData = database.animeDao().getAnimeListByWishStatus();
+        database.close();
+        return listLiveData;
     }
 
     private LiveData<List<Anime>> getAnimeListByWatchedStatus() {
-        return animeDao.getAnimeListByWatchedStatus();
+        AppDatabase database = getDatabase();
+        LiveData<List<Anime>> listLiveData = database.animeDao().getAnimeListByWatchedStatus();
+        database.close();
+        return listLiveData;
     }
 
     public void performSearch(String query) {
@@ -68,7 +73,8 @@ public class AnimeListViewModel extends ViewModel {
             @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onResponse(@NonNull Call<AnimeReport> call, @NonNull Response<AnimeReport> response) {
-                if (response.isSuccessful() && response.body() != null) responseLiveData.postValue(response.body().getItems());
+                if (response.isSuccessful() && response.body() != null)
+                    responseLiveData.postValue(response.body().getItems());
                 else {
                     Log.w("WARNING", "response: " + response.body());
                     Log.w("WARNING", "call: " + call);
@@ -93,34 +99,32 @@ public class AnimeListViewModel extends ViewModel {
         });
     }
 
+    private final MediatorLiveData<List<AnimeItem>> mediatorLiveData = new MediatorLiveData<>();
+
     public void init() {
-        MediatorLiveData<List<AnimeItem>> mediatorLiveData = new MediatorLiveData<>();
         LiveData<List<Anime>> watchedLiveData = getAnimeListByWatchedStatus();
         LiveData<List<Anime>> wishLiveData = getAnimeListByWishStatus();
-        mediatorLiveData.addSource(responseLiveData, animeItems -> {
-            if (animeItems != null && watchedLiveData.getValue() != null && wishLiveData.getValue() != null) {
-                List<Anime> watchedList = watchedLiveData.getValue();
-                List<Anime> wishList = wishLiveData.getValue();
-                Map<Long, Anime> watchedMap = new HashMap<>();
-                Map<Long, Anime> wishMap = new HashMap<>();
-                for (Anime anime : watchedList) watchedMap.put(anime.getId(), anime);
-                for (Anime anime : wishList) wishMap.put(anime.getId(), anime);
-                for (AnimeItem animeItem : animeItems) {
-                    animeItem.setWishStatus(wishMap.containsKey(animeItem.getId()));
-                    animeItem.setWatchedStatus(watchedMap.containsKey(animeItem.getId()));
-                }
-                mediatorLiveData.setValue(animeItems);
-                SavedStateHandle savedStateHandle1 = new SavedStateHandle();
-                savedStateHandle1.set(KEY_SAVED_STATE, animeItems);
-                savedStateHandle.setValue(savedStateHandle1);
-            }
-        });
-        mediatorLiveData.addSource(watchedLiveData, watchedList -> {
-            if (responseLiveData.getValue() != null && watchedList != null && wishLiveData.getValue() != null) mediatorLiveData.setValue(responseLiveData.getValue());
-        });
-        mediatorLiveData.addSource(wishLiveData, wishList -> {
-            if (responseLiveData.getValue() != null && watchedLiveData.getValue() != null && wishList != null) mediatorLiveData.setValue(responseLiveData.getValue());
-        });
+        mediatorLiveData.removeSource(responseLiveData);
+        mediatorLiveData.addSource(responseLiveData, animeItems -> initAnimeList(animeItems, watchedLiveData.getValue(), wishLiveData.getValue()));
+        mediatorLiveData.addSource(watchedLiveData, watchedList -> initAnimeList(responseLiveData.getValue(), watchedList, wishLiveData.getValue()));
+        mediatorLiveData.addSource(wishLiveData, wishList -> initAnimeList(responseLiveData.getValue(), watchedLiveData.getValue(), wishList));
         mediatorLiveData.observeForever(animeListLiveData::setValue);
+    }
+
+    private void initAnimeList(List<AnimeItem> animeItemList, List<Anime> watchedList, List<Anime> wishList){
+        if (animeItemList != null && watchedList != null && wishList != null) {
+            Map<Long, Anime> watchedMap = new HashMap<>();
+            Map<Long, Anime> wishMap = new HashMap<>();
+            for (Anime anime : watchedList) watchedMap.put(anime.getId(), anime);
+            for (Anime anime : wishList) wishMap.put(anime.getId(), anime);
+            for (AnimeItem animeItem : animeItemList) {
+                animeItem.setWishStatus(wishMap.containsKey(animeItem.getId()));
+                animeItem.setWatchedStatus(watchedMap.containsKey(animeItem.getId()));
+            }
+            mediatorLiveData.setValue(animeItemList);
+            SavedStateHandle savedStateHandle1 = new SavedStateHandle();
+            savedStateHandle1.set(KEY_SAVED_STATE, animeItemList);
+            savedStateHandle.setValue(savedStateHandle1);
+        }
     }
 }

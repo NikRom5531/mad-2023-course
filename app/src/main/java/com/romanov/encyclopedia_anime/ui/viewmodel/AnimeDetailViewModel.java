@@ -55,13 +55,10 @@ public class AnimeDetailViewModel extends ViewModel {
             @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onResponse(@NonNull Call<AnimeDetail> call, @NonNull Response<AnimeDetail> response) {
-                Log.i("INFO", call.toString());
                 if (response.isSuccessful() && response.body() != null) {
-                    AnimeDetail animeDetail = response.body();
-                    anime = animeDetail.getAnime();
-                    animeDetailLiveData.postValue(mapList(animeDetail.getAnime()));
+                    anime = response.body().getAnime();
+                    animeDetailLiveData.postValue(mapList(response.body().getAnime()));
                 } else {
-                    // Обработка ошибок
                     Log.w("WARNING", "response: " + response.body());
                     Log.w("WARNING", "call: " + call);
                     animeDetailLiveData.postValue(mapList(null));
@@ -70,13 +67,8 @@ public class AnimeDetailViewModel extends ViewModel {
 
             @Override
             public void onFailure(@NonNull Call<AnimeDetail> call, @NonNull Throwable t) {
-                if (t instanceof SocketTimeoutException) {
-                    // Вывести сообщение об ошибке времени ожидания
-                    Log.e("FAILURE", "Socket Timeout: " + t);
-                } else {
-                    // Обработка других ошибок
-                    Log.e("FAILURE", t.toString());
-                }
+                if (t instanceof SocketTimeoutException) Log.e("FAILURE", "Socket Timeout: " + t);
+                else Log.e("FAILURE", t.toString());
                 animeDetailLiveData.postValue(mapList(null));
             }
         });

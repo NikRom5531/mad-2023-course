@@ -58,7 +58,7 @@ public class AnimeDetailFragment extends Fragment {
         animeId = args != null ? args.getLong(animeDetailViewModel.KEY_ANIME_ID) : 0;
 
         dataBaseViewModel = new ViewModelProvider(this).get(DataBaseViewModel.class);
-        dataBaseViewModel.setDatabase(requireContext());
+        dataBaseViewModel.setContextFragment(requireContext());
         dataBaseViewModel.getWatchedStatusLiveData().observe(getViewLifecycleOwner(), this::checkWatched);
         dataBaseViewModel.getWishStatusLiveData().observe(getViewLifecycleOwner(), this::checkWish);
 
@@ -126,12 +126,12 @@ public class AnimeDetailFragment extends Fragment {
     }
 
     private void checkWatched(boolean status) {
-        if (status) binding.buttonWatchList.setColorFilter(Color.argb(255, 66, 170, 255));
-        else binding.buttonWatchList.clearColorFilter();
+        if (status) binding.buttonWatchList.setImageResource(R.drawable.ic_view_on);
+        else binding.buttonWatchList.setImageResource(R.drawable.ic_view);
     }
 
     private void checkWish(boolean status) {
-        if (status) binding.buttonWishList.setColorFilter(Color.RED);
-        else binding.buttonWishList.clearColorFilter();
+        if (status) binding.buttonWishList.setImageResource(R.drawable.ic_wish_on);
+        else binding.buttonWishList.setImageResource(R.drawable.ic_wish);
     }
 }

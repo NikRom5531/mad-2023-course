@@ -3,7 +3,6 @@ package com.romanov.encyclopedia_anime.ui.fragment;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,15 +48,13 @@ public class AnimeListFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         // Подписываемся на изменения LiveData
-        animeListViewModel.setDatabase(requireContext());
+        animeListViewModel.setContextFragment(requireContext());
         animeListViewModel.init();
         animeListViewModel.getAnimeListLiveData().observe(getViewLifecycleOwner(), this::updateAnimeList);
         adapter = new AnimeListAdapter(new ArrayList<>());
         adapter.setOnItemClickListener(position -> {
             Bundle bundle = new Bundle();
-            Log.i("INFO", "anime_id: " + adapter.getAnimeList().get(position).getId());
             bundle.putLong("anime_id", adapter.getAnimeList().get(position).getId());
-
             NavController navController = Navigation.findNavController(AnimeListFragment.this.requireActivity(), R.id.nav_host_fragment);
             navController.navigate(R.id.action_animeListFragment_to_animeDetailFragment, bundle);
         });

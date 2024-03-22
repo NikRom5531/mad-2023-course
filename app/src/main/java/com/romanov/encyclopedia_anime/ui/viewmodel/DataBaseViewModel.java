@@ -20,7 +20,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class DataBaseViewModel extends ViewModel {
-    private AnimeDao animeDao;
+    private Context contextFragment;
     public MediatorLiveData<List<AnimeItem>> allAnime = new MediatorLiveData<>();
     private final ExecutorService executorService = Executors.newSingleThreadExecutor();
     private final MediatorLiveData<List<Anime>> wishListLiveData = new MediatorLiveData<>();
@@ -44,27 +44,39 @@ public class DataBaseViewModel extends ViewModel {
     public DataBaseViewModel() {
     }
 
-    public void setDatabase(Context context) {
-        setAnimeDao(Room.databaseBuilder(context, AppDatabase.class, "anime_database").fallbackToDestructiveMigration().build().animeDao());
+    public void setContextFragment(Context context) {
+        contextFragment = context;
     }
 
-    private void setAnimeDao(AnimeDao animeDao) {
-        this.animeDao = animeDao;
+    private AppDatabase getDatabase() {
+        return Room.databaseBuilder(contextFragment, AppDatabase.class, "anime_database").fallbackToDestructiveMigration().build();
     }
 
     // Вызов метода вставки из DAO
     private void insert(Anime anime) {
-        executorService.execute(() -> animeDao.insert(anime.getId(), anime.getName(), anime.getType(), anime.isWatchedStatus(), anime.isWishStatus()));
+        executorService.execute(() -> {
+            AppDatabase db = getDatabase();
+            db.animeDao().insert(anime.getId(), anime.getName(), anime.getType(), anime.isWatchedStatus(), anime.isWishStatus());
+            db.close();
+        });
     }
 
     // Вызов метода обновления из DAO
     private void update(Anime anime) {
-        executorService.execute(() -> animeDao.update(anime.getId(), anime.getName(), anime.getType(), anime.isWatchedStatus(), anime.isWishStatus()));
+        executorService.execute(() -> {
+            AppDatabase db = getDatabase();
+            db.animeDao().update(anime.getId(), anime.getName(), anime.getType(), anime.isWatchedStatus(), anime.isWishStatus());
+            db.close();
+        });
     }
 
     // Вызов метода удаления из DAO
     private void delete(long animeId) {
-        executorService.execute(() -> animeDao.delete(animeId));
+        executorService.execute(() -> {
+            AppDatabase db = getDatabase();
+            db.animeDao().delete(animeId);
+            db.close();
+        });
     }
 
     public LiveData<List<AnimeItem>> getAllAnime() {
@@ -76,15 +88,24 @@ public class DataBaseViewModel extends ViewModel {
     }
 
     private LiveData<Boolean> isAnimeWatched(long animeId) {
-        return animeDao.isAnimeWatched(animeId);
+        AppDatabase db = getDatabase();
+        LiveData<Boolean> booleanLiveData = db.animeDao().isAnimeWatched(animeId);
+        db.close();
+        return booleanLiveData;
     }
 
     private LiveData<Boolean> isAnimeWish(long animeId) {
-        return animeDao.isAnimeWish(animeId);
+        AppDatabase db = getDatabase();
+        LiveData<Boolean> booleanLiveData = db.animeDao().isAnimeWish(animeId);
+        db.close();
+        return booleanLiveData;
     }
 
     private LiveData<Anime> getAnimeById(long animeId) {
-        return animeDao.getAnimeById(animeId);
+        AppDatabase db = getDatabase();
+        LiveData<Anime> anime = db.animeDao().getAnimeById(animeId);
+        db.close();
+        return anime;
     }
 
     private LiveData<List<Anime>> getAllListByStatus(LiveData<List<Anime>> sourceLiveData, MutableLiveData<List<Anime>> targetLiveData) {
@@ -98,14 +119,28 @@ public class DataBaseViewModel extends ViewModel {
         return mediatorLiveData;
     }
 
+    private LiveData<List<Anime>> getAnimeListByWishStatus() {
+        AppDatabase database = getDatabase();
+        LiveData<List<Anime>> listLiveData = database.animeDao().getAnimeListByWishStatus();
+        database.close();
+        return listLiveData;
+    }
+
+    private LiveData<List<Anime>> getAnimeListByWatchedStatus() {
+        AppDatabase database = getDatabase();
+        LiveData<List<Anime>> listLiveData = database.animeDao().getAnimeListByWatchedStatus();
+        database.close();
+        return listLiveData;
+    }
+
     public void setWatchedList() {
-        watchedListLiveData.addSource(getAllListByStatus(animeDao.getAnimeListByWatchedStatus(), watchedListLiveData), watchedList -> {
+        watchedListLiveData.addSource(getAllListByStatus(getAnimeListByWatchedStatus(), watchedListLiveData), watchedList -> {
             if (watchedList != null) watchedListLiveData.postValue(watchedList);
         });
     }
 
     public void setWishList() {
-        wishListLiveData.addSource(getAllListByStatus(animeDao.getAnimeListByWishStatus(), wishListLiveData), wishList -> {
+        wishListLiveData.addSource(getAllListByStatus(getAnimeListByWishStatus(), wishListLiveData), wishList -> {
             if (wishList != null) wishListLiveData.postValue(wishList);
         });
     }
@@ -142,14 +177,14 @@ public class DataBaseViewModel extends ViewModel {
     }
 
     public void updateWishStatus(Anime anime) {
-        LiveData<Boolean> watchedLiveData = animeDao.isAnimeWatched(anime.getId());
-        LiveData<Boolean> wishLiveData = animeDao.isAnimeWish(anime.getId());
+        LiveData<Boolean> watchedLiveData = isAnimeWatched(anime.getId());
+        LiveData<Boolean> wishLiveData = isAnimeWish(anime.getId());
         updateStatus(anime, watchedLiveData, wishLiveData, wishStatusLiveData, "wish");
     }
 
     public void updateWatchedStatus(Anime anime) {
-        LiveData<Boolean> watchedLiveData = animeDao.isAnimeWatched(anime.getId());
-        LiveData<Boolean> wishLiveData = animeDao.isAnimeWish(anime.getId());
+        LiveData<Boolean> watchedLiveData = isAnimeWatched(anime.getId());
+        LiveData<Boolean> wishLiveData = isAnimeWish(anime.getId());
         updateStatus(anime, watchedLiveData, wishLiveData, watchedStatusLiveData, "watched");
     }
 
