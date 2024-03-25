@@ -124,7 +124,7 @@ public class AnimeDetailViewModel extends ViewModel {
                         } catch (Exception e) {
                             Log.e("Failed", item.getText());
                         }
-                        vintage = new StringBuilder("Vintage: " + s_date);
+                        vintage = new StringBuilder("Vintage: " + s_date + " ");
                     }
                 }
                 mapList.put(KEY_ANIME_IMAGE, imageSrc.toString());

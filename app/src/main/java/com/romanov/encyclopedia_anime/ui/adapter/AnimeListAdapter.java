@@ -1,5 +1,6 @@
 package com.romanov.encyclopedia_anime.ui.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -78,9 +79,10 @@ public class AnimeListAdapter extends RecyclerView.Adapter<AnimeListAdapter.Anim
             buttonWishList = itemView.findViewById(R.id.buttonWishList);
         }
 
+        @SuppressLint("SetTextI18n")
         public void bind(AnimeItem anime) {
             textNameAnime.setText(anime.getName());
-            textType.setText(anime.getType());
+            textType.setText(anime.getType() + " ");
             buttonWatchList.setImageResource(checkWatched(anime.isWatchedStatus()));
             buttonWishList.setImageResource(checkWish(anime.isWishStatus()));
         }

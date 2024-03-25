@@ -12,7 +12,6 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-
 rootProject.name = "mad-2023-course"
+//rootProject.buildFileName = "Encyclopedia Anime"
 include(":app")
- 

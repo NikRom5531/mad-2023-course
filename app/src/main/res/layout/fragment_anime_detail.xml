@@ -1,5 +1,6 @@
 <!-- fragment_anime_detail.xml -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fragmentAnimeDetailContainer"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -54,7 +55,9 @@
                 android:layout_marginTop="@dimen/_10dp"
                 android:text="@string/load_data"
                 android:textSize="@dimen/_20sp"
-                android:textStyle="italic" />
+                android:paddingEnd="@dimen/_10dp"
+                android:textStyle="italic"
+                tools:ignore="RtlSymmetry" />
 
             <!-- Кнопка для добавления в просмотренное -->
             <ImageView

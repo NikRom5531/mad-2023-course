@@ -72,17 +72,15 @@ public class AnimeListFragment extends Fragment {
             public boolean onQueryTextChange(String newText) {
                 return false;
             }
+
         });
 
         // Восстановление данных
         animeListViewModel.getSavedStateHandle().observe(getViewLifecycleOwner(), savedStateHandle -> {
             if (savedStateHandle != null) {
-                List<AnimeItem> animeList = savedStateHandle.get(animeListViewModel.KEY_SAVED_STATE);
-                updateAnimeList(animeList);
-                if (savedStateHandle.contains("errorMessage")) {
-                    String errorMessage = savedStateHandle.get("errorMessage");
-                    Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show();
-                }
+                binding.searchView.setQuery(savedStateHandle.get(animeListViewModel.KEY_SEARCH_TEXT), false);
+                updateAnimeList(savedStateHandle.get(animeListViewModel.KEY_SAVED_STATE));
+                if (savedStateHandle.contains(animeListViewModel.KEY_ERROR)) Toast.makeText(requireContext(), savedStateHandle.get(animeListViewModel.KEY_ERROR), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -128,7 +126,9 @@ public class AnimeListFragment extends Fragment {
         super.onSaveInstanceState(outState);
         // Сохранение состояния в SavedStateHandle
         if (adapter != null) if (adapter.getAnimeList() != null)
-            if (animeListViewModel.getSavedStateHandle().getValue() != null)
+            if (animeListViewModel.getSavedStateHandle().getValue() != null) {
                 animeListViewModel.getSavedStateHandle().getValue().set(animeListViewModel.KEY_SAVED_STATE, adapter.getAnimeList());
+                animeListViewModel.getSavedStateHandle().getValue().set(animeListViewModel.KEY_SEARCH_TEXT, binding.searchView.getQuery());
+            }
     }
 }

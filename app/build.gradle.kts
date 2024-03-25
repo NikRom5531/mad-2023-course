@@ -1,3 +1,5 @@
+import com.android.build.gradle.internal.cxx.logging.warnln
+
 plugins {
     id("com.android.application")
 }
@@ -15,7 +17,6 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
-
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -25,10 +26,13 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
+        warnln("--warning-mode all")
     }
+
     buildFeatures {
         viewBinding = true
     }
@@ -46,11 +50,9 @@ dependencies {
     implementation("com.caverock:androidsvg:1.4")
 
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("com.squareup.retrofit2:converter-simplexml:2.9.0")
     implementation("com.squareup.picasso:picasso:2.71828")
 
-    implementation("com.google.code.gson:gson:2.10")
     implementation("com.google.android.material:material:1.11.0")
     implementation("com.google.android.libraries.places:places:3.3.0")
 
@@ -62,9 +64,6 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.preference:preference:1.2.1")
     implementation("androidx.legacy:legacy-support-v4:1.0.0")
-
-    implementation("org.parceler:parceler-api:1.1.13")
-    annotationProcessor("org.parceler:parceler:1.1.13")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

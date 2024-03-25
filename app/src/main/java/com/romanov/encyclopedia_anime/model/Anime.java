@@ -13,7 +13,6 @@ import org.simpleframework.xml.Text;
 
 import java.util.List;
 
-
 @Root(name = "anime", strict = false)
 @Entity(tableName = "anime_table")
 public class Anime {
@@ -44,14 +43,6 @@ public class Anime {
     private boolean wishStatus = false;
 
     public Anime() {
-    }
-
-    public Anime(long id, String name, String type, boolean watchedStatus, boolean wishStatus) {
-        this.id = id;
-        this.name = name;
-        this.type = type;
-        this.watchedStatus = watchedStatus;
-        this.wishStatus = wishStatus;
     }
 
     public boolean isWatchedStatus() {

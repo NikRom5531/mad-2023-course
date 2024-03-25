@@ -12,12 +12,11 @@ import androidx.lifecycle.SavedStateHandle;
 import androidx.lifecycle.ViewModel;
 import androidx.room.Room;
 
-import com.romanov.encyclopedia_anime.data.local.AnimeDao;
 import com.romanov.encyclopedia_anime.data.local.AppDatabase;
 import com.romanov.encyclopedia_anime.data.remote.AnimeApiClient;
 import com.romanov.encyclopedia_anime.model.Anime;
-import com.romanov.encyclopedia_anime.model.AnimeReport.AnimeItem;
 import com.romanov.encyclopedia_anime.model.AnimeReport;
+import com.romanov.encyclopedia_anime.model.AnimeReport.AnimeItem;
 
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
@@ -32,6 +31,9 @@ import retrofit2.Response;
 public class AnimeListViewModel extends ViewModel {
     private Context contextFragment;
     public final String KEY_SAVED_STATE = "savedStateHandle";
+    public final String KEY_SEARCH_TEXT = "savedSearchText";
+    public final String KEY_ERROR = "errorMessage";
+    private String savedQuery = "";
     private final MutableLiveData<List<AnimeItem>> animeListLiveData = new MutableLiveData<>();
 
     public LiveData<List<AnimeItem>> getAnimeListLiveData() {
@@ -66,8 +68,8 @@ public class AnimeListViewModel extends ViewModel {
         database.close();
         return listLiveData;
     }
-
     public void performSearch(String query) {
+        savedQuery = query;
         AnimeApiClient animeApiClient = new AnimeApiClient();
         animeApiClient.getAnimeList(query).enqueue(new Callback<AnimeReport>() {
             @SuppressLint("NotifyDataSetChanged")
@@ -83,18 +85,18 @@ public class AnimeListViewModel extends ViewModel {
 
             @Override
             public void onFailure(@NonNull Call<AnimeReport> call, @NonNull Throwable t) {
-                SavedStateHandle savedStateHandleError = new SavedStateHandle();
+                String errorMessage;
                 if (t instanceof SocketTimeoutException) {
+                    errorMessage = "Превышено время ожидания";
                     Log.e("FAILURE", "Socket Timeout: " + t);
-                    savedStateHandleError.set("errorMessage", "Превышено время ожидания");
                 } else if (t instanceof UnknownHostException) {
+                    errorMessage = "Не удалось установить соединение";
                     Log.e("FAILURE", "Unknown Host: " + t);
-                    savedStateHandleError.set("errorMessage", "Не удалось установить соединение");
                 } else {
+                    errorMessage = t.toString();
                     Log.e("FAILURE", t.toString());
-                    savedStateHandleError.set("errorMessage", t.toString());
                 }
-                savedStateHandle.postValue(savedStateHandleError);
+                setSavedStateHandle(KEY_ERROR, errorMessage);
             }
         });
     }
@@ -122,9 +124,14 @@ public class AnimeListViewModel extends ViewModel {
                 animeItem.setWatchedStatus(watchedMap.containsKey(animeItem.getId()));
             }
             mediatorLiveData.setValue(animeItemList);
-            SavedStateHandle savedStateHandle1 = new SavedStateHandle();
-            savedStateHandle1.set(KEY_SAVED_STATE, animeItemList);
-            savedStateHandle.setValue(savedStateHandle1);
+            setSavedStateHandle(KEY_SAVED_STATE, animeItemList);
         }
+    }
+
+    private <T> void setSavedStateHandle(String key, T obj) {
+        SavedStateHandle savedStateHandleTemp = new SavedStateHandle();
+        savedStateHandleTemp.set(KEY_SEARCH_TEXT, savedQuery);
+        savedStateHandleTemp.set(key, obj);
+        savedStateHandle.postValue(savedStateHandleTemp);
     }
 }

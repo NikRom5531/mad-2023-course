@@ -1,5 +1,6 @@
 package com.romanov.encyclopedia_anime.ui.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -57,9 +58,10 @@ public class AnimeLowAdapter extends RecyclerView.Adapter<AnimeLowAdapter.AnimeV
             textType = itemView.findViewById(R.id.textType);
         }
 
+        @SuppressLint("SetTextI18n")
         public void bind(Anime anime) {
             textNameAnime.setText(anime.getName());
-            textType.setText(anime.getType());
+            textType.setText(anime.getType() + " ");
         }
 
     }
